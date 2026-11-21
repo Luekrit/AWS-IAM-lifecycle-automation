@@ -1,0 +1,114 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "IdentifyCaller",
+      "Effect": "Allow",
+      "Action": "sts:GetCallerIdentity",
+      "Resource": "*"
+    },
+    {
+      "Sid": "ReadIdentityInventory",
+      "Effect": "Allow",
+      "Action": [
+        "iam:Get*",
+        "iam:List*",
+        "iam:GenerateCredentialReport"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CreateLabUsersOnlyWithBoundary",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreateUser",
+        "iam:PutUserPermissionsBoundary"
+      ],
+      "Resource": "arn:aws:iam::*:user/iamlab/*",
+      "Condition": {
+        "ArnLike": { "iam:PermissionsBoundary": "arn:aws:iam::*:policy/iamlab/iamlab-user-boundary" }
+      }
+    },
+    {
+      "Sid": "ManageLabUsersOnly",
+      "Effect": "Allow",
+      "Action": [
+        "iam:TagUser",
+        "iam:UntagUser",
+        "iam:AddUserToGroup",
+        "iam:RemoveUserFromGroup",
+        "iam:DetachUserPolicy",
+        "iam:PutUserPolicy",
+        "iam:DeleteUserPolicy",
+        "iam:CreateLoginProfile",
+        "iam:UpdateLoginProfile",
+        "iam:DeleteLoginProfile",
+        "iam:UpdateAccessKey",
+        "iam:DeleteAccessKey",
+        "iam:DeactivateMFADevice",
+        "iam:UpdateSSHPublicKey",
+        "iam:DeleteSSHPublicKey",
+        "iam:UpdateSigningCertificate",
+        "iam:DeleteSigningCertificate",
+        "iam:UpdateServiceSpecificCredential",
+        "iam:DeleteServiceSpecificCredential",
+        "iam:DeleteUser"
+      ],
+      "Resource": [
+        "arn:aws:iam::*:user/iamlab/*",
+        "arn:aws:iam::*:group/iamlab/*"
+      ]
+    },
+    {
+      "Sid": "DeleteVirtualMFADevicesOfLeavers",
+      "Effect": "Allow",
+      "Action": "iam:DeleteVirtualMFADevice",
+      "Resource": "arn:aws:iam::*:mfa/*"
+    },
+    {
+      "Sid": "BootstrapLabGroupsAndPolicies",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreateGroup",
+        "iam:AttachGroupPolicy",
+        "iam:DetachGroupPolicy",
+        "iam:CreatePolicy",
+        "iam:CreatePolicyVersion",
+        "iam:DeletePolicyVersion"
+      ],
+      "Resource": [
+        "arn:aws:iam::*:group/iamlab/*",
+        "arn:aws:iam::*:policy/iamlab/*"
+      ]
+    },
+    {
+      "Sid": "SetAccountPasswordPolicy",
+      "Effect": "Allow",
+      "Action": "iam:UpdateAccountPasswordPolicy",
+      "Resource": "*"
+    },
+    {
+      "Sid": "StoreOnboardingSecretsOnly",
+      "Effect": "Allow",
+      "Action": [
+        "secretsmanager:CreateSecret",
+        "secretsmanager:TagResource"
+      ],
+      "Resource": "arn:aws:secretsmanager:*:*:secret:iamlab/onboarding/*"
+    },
+    {
+      "Sid": "AutomationNeverMintsKeysOrRemovesGuardrails",
+      "Effect": "Deny",
+      "Action": [
+        "iam:CreateAccessKey",
+        "iam:AttachUserPolicy",
+        "iam:DeleteUserPermissionsBoundary",
+        "iam:DeletePolicy",
+        "iam:CreateRole",
+        "iam:AttachRolePolicy",
+        "iam:PutRolePolicy"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

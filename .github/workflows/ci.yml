@@ -1,0 +1,42 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+# Least-privilege token: the workflow only needs to read the code.
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # Tip: pin each action to a full commit SHA (e.g. with `pinact` or Dependabot) for supply-chain safety.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Secret scan (full history)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install -e ".[dev]"
+
+      - name: Lint (incl. bandit security rules)
+        run: ruff check .
+
+      - name: Validate lifecycle CSVs
+        run: |
+          python Phase2_Joiner_automation/validate_csv.py
+          python Phase2_Joiner_automation/validate_csv.py Phase3_mover_leaver_automation/mover_leaver.csv --schema lifecycle
+
+      - name: Unit tests against mocked AWS (no real account needed)
+        run: pytest -q

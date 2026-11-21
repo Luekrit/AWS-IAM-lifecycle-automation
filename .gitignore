@@ -1,0 +1,28 @@
+# --- Never commit credentials -------------------------------------------
+*credentials*.csv
+*accessKeys*.csv
+*_accessKeys.csv
+.aws/
+.env
+.env.*
+*.pem
+*.key
+
+# Unredacted screenshot backups (contain real account/key IDs).
+# Move this folder outside the repo, or delete it once you are happy with the redaction.
+_original_screenshots_DO_NOT_COMMIT/
+
+# --- Generated output (may contain identities / account IDs) -------------
+audit-logs/
+reports/
+
+# --- Python ---------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/

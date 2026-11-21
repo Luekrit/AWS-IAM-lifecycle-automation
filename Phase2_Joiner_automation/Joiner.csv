@@ -1,0 +1,4 @@
+username,role,ticket
+alice.hr,hr-analyst,HR-1001
+bob.dev,developer,HR-1002
+carol.sec,security-analyst,HR-1003

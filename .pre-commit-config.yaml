@@ -1,0 +1,25 @@
+# Install once:  pip install pre-commit && pre-commit install
+# Refresh hook versions:  pre-commit autoupdate
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.0
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+
+  - repo: local
+    hooks:
+      - id: no-hardcoded-aws-account-ids
+        name: Block hardcoded AWS account IDs in ARNs
+        language: pygrep
+        entry: 'arn:aws[a-z-]*:[a-z0-9-]*:[a-z0-9-]*:(?!123456789012|111122223333)\d{12}:'
+        types_or: [python, json, markdown, yaml, csv]
+      - id: no-credential-exports
+        name: Block AWS console credential CSV exports
+        language: fail
+        entry: AWS credential CSV exports must never be committed
+        files: '(credentials|accessKeys).*\.csv$'
