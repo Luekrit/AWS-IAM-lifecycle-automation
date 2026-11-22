@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/banner.png" alt="AWS IAM Lifecycle Automation: Joiner, Mover, Leaver and Access Review" width="100%">
+</p>
+
 # AWS IAM Lifecycle Automation: Joiner-Mover-Leaver & Access Review
 
 A hands-on lab that simulates enterprise **Identity and Access Management (IAM)** governance in AWS: the Joiner–Mover–Leaver (JML) lifecycle, done manually first and then automated with Python and Boto3, followed by an automated access review.
