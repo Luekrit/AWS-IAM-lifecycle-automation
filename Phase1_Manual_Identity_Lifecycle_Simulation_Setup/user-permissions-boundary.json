@@ -16,7 +16,6 @@
         "logs:List*",
         "logs:FilterLogEvents",
         "logs:StartQuery",
-        "logs:GetQueryResults",
         "cloudtrail:LookupEvents",
         "cloudtrail:Describe*",
         "cloudtrail:Get*",
@@ -34,10 +33,20 @@
         "iam:ResyncMFADevice",
         "iam:DeactivateMFADevice",
         "iam:DeleteVirtualMFADevice",
-        "iam:PassRole",
         "sts:GetSessionToken"
       ],
       "Resource": "*"
+    },
+    {
+      "Sid": "PassOnlyApprovedLambdaExecutionRoles",
+      "Effect": "Allow",
+      "Action": "iam:PassRole",
+      "Resource": "arn:aws:iam::*:role/lambda-exec/*",
+      "Condition": {
+        "StringEquals": {
+          "iam:PassedToService": "lambda.amazonaws.com"
+        }
+      }
     },
     {
       "Sid": "NeverAllowAuditTampering",
